@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SchoolApi.Repositories;
+using SchoolApi.Services;
 
 namespace SchoolApi.Controllers
 {
@@ -8,10 +10,18 @@ namespace SchoolApi.Controllers
     public class SchoolsController : ControllerBase
     {
 
-        [HttpGet]
-        public IActionResult GetSchool(int id)
+        private readonly ISchoolService _schoolService;
+        public SchoolsController(ISchoolService schoolService)
         {
-            return Ok("Hello " + id);
+            _schoolService = schoolService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetSchool(int id)
+        {
+            var school = await _schoolService.GetSchoolById(id);
+            
+            return Ok(school);
         }
     }
 }
