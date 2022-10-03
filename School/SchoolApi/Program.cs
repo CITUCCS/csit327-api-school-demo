@@ -1,4 +1,5 @@
 using SchoolApi.Context;
+using SchoolApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Trasient -> create new instance of DapperContext everytime.
 builder.Services.AddTransient<DapperContext>();
+builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 
 var app = builder.Build();
 
