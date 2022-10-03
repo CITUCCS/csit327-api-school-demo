@@ -1,3 +1,6 @@
+using SchoolApi.Context;
+using SchoolApi.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -6,6 +9,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddTransient<DapperContext>();
+builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+
+
 
 var app = builder.Build();
 
