@@ -16,11 +16,18 @@ namespace SchoolApi.Controllers
             _schoolService = schoolService;
         }
 
-        [HttpGet]
+        [HttpGet("{id}", Name = "GetSchoolById")] // GET /api/schools/{id} ex: /api/schools/-4.5
         public async Task<IActionResult> GetSchool(int id)
         {
-            var school = await _schoolService.GetSchoolById(id);
-            return Ok(school);
+            try
+            {
+                var school = await _schoolService.GetSchoolById(id);
+                return Ok(school);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500, "Something went wrong");
+            }
         }
     }
 }
