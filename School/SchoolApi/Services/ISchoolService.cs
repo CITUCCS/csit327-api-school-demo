@@ -1,4 +1,5 @@
-﻿using SchoolApi.Models;
+﻿using SchoolApi.Dtos;
+using SchoolApi.Models;
 
 namespace SchoolApi.Services
 {
@@ -6,6 +7,6 @@ namespace SchoolApi.Services
     {
         Task<IEnumerable<School>> GetAllSchools();
         Task<School> GetSchoolById(int id);
-        Task<School> CreateSchool(School schoolToCreate);
+        Task<School> CreateSchool(SchoolCreationDto schoolToCreate);
     }
 }
