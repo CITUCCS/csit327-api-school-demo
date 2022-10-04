@@ -12,6 +12,13 @@ namespace SchoolApi.Services
             _repository = repository;
         }
 
+        public async Task<School> CreateSchool(School schoolToCreate)
+        {
+            schoolToCreate.Id = await _repository.Create(schoolToCreate);
+
+            return schoolToCreate;
+        }
+
         public Task<IEnumerable<School>> GetAllSchools()
         {
             return _repository.GetAll();
