@@ -11,6 +11,12 @@ namespace SchoolApi.Services
         {
             _repository = repository;
         }
+
+        public Task<IEnumerable<School>> GetAllSchools()
+        {
+            return _repository.GetAll();
+        }
+
         public Task<School> GetSchoolById(int id)
         {
             return _repository.GetSchool(id);

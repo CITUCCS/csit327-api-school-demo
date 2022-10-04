@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using SchoolApi.Repositories;
 using SchoolApi.Services;
 
@@ -24,6 +25,26 @@ namespace SchoolApi.Controllers
                 var school = await _schoolService.GetSchoolById(id);
                 return Ok(school);
             }
+            catch (Exception)
+            {
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        [HttpGet(Name = "GetAllSchools")] // GET api/schools/
+        public async Task<IActionResult> GetSchools()
+        {
+            try
+            {
+                var schools = await _schoolService.GetAllSchools();
+
+                if (schools.IsNullOrEmpty())
+                {
+                    return NoContent();
+                }
+
+                return Ok(schools);
+            } 
             catch (Exception)
             {
                 return StatusCode(500, "Something went wrong");

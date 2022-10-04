@@ -13,6 +13,16 @@ namespace SchoolApi.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<School>> GetAll()
+        {
+            var sql = "SELECT * FROM School";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QueryAsync<School>(sql);
+            }
+        }
+
         public async Task<School> GetSchool(int id)
         {
             var sql = "SELECT * FROM School WHERE Id = @id";
