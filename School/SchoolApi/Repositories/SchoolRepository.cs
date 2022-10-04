@@ -13,6 +13,17 @@ namespace SchoolApi.Repositories
             _context = context;
         }
 
+        public async Task<int> Create(School school)
+        {
+            var sql = "INSERT INTO School (Name, Address, Motto, AverageTuition) VALUES (@Name, @Adress, @Motto, @AverageTution); " +
+                "SELECT SCOPED_IDENTITY();";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.ExecuteScalarAsync<int>(sql, school);
+            }
+        }
+
         public async Task<IEnumerable<School>> GetAll()
         {
             var sql = "SELECT * FROM School";

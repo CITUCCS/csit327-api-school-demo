@@ -6,5 +6,6 @@ namespace SchoolApi.Repositories
     {
         Task<IEnumerable<School>> GetAll();
         Task<School> GetSchool(int id);
+        Task<int> Create(School school);
     }
 }
