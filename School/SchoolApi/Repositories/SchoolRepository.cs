@@ -15,8 +15,8 @@ namespace SchoolApi.Repositories
 
         public async Task<int> Create(School school)
         {
-            var sql = "INSERT INTO School (Name, Address, Motto, AverageTuition) VALUES (@Name, @Adress, @Motto, @AverageTution); " +
-                "SELECT SCOPED_IDENTITY();";
+            var sql = "INSERT INTO School (Name, Address, Motto, AverageTuition) VALUES (@Name, @Address, @Motto, @AverageTuition); " +
+                "SELECT SCOPE_IDENTITY();";
 
             using (var con = _context.CreateConnection())
             {
