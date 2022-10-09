@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SchoolApi.Dtos.School;
 using SchoolApi.Dtos.Student;
-using SchoolApi.Models;
-using SchoolApi.Repositories;
 using SchoolApi.Services;
 
 namespace SchoolApi.Controllers
@@ -14,15 +12,18 @@ namespace SchoolApi.Controllers
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
+        private readonly IStudentService _studentService;
         private readonly IEnrollmentService _enrollmentService;
         private readonly ILogger<SchoolsController> _logger;
 
         public SchoolsController(
             ISchoolService schoolService,
+            IStudentService studentService,
             IEnrollmentService enrollmentService,
             ILogger<SchoolsController> logger)
         {
             _schoolService = schoolService;
+            _studentService = studentService;
             _enrollmentService = enrollmentService;
             _logger = logger;
         }
@@ -34,7 +35,7 @@ namespace SchoolApi.Controllers
             {
                 var school = await _schoolService.GetSchoolById(id);
 
-                if (school == null) 
+                if (school == null)
                     return NotFound($"School with id {id} does not exist.");
 
                 return Ok(school);
@@ -59,7 +60,7 @@ namespace SchoolApi.Controllers
                 }
 
                 return Ok(schools);
-            } 
+            }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
@@ -109,5 +110,30 @@ namespace SchoolApi.Controllers
                 return StatusCode(500, "Something went wrong");
             }
         }
+
+        [HttpGet("{id}/students")]
+        public async Task<IActionResult> GetSchoolStudents(int id)
+        {
+            try
+            {
+                // Check if school exists
+                var school = await _schoolService.GetSchoolById(id);
+                if (school == null)
+                    return NotFound($"School with id {id} does not exist.");
+
+                var enrolledStudents = await _studentService.GetAllStudents(id);
+                if (!enrolledStudents.Any())
+                {
+                    return NoContent();
+                }
+
+                return Ok(enrolledStudents);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        } 
     }
 }

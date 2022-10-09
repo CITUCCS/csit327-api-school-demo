@@ -12,11 +12,36 @@ namespace SchoolApi.Services
         {
             _studentRepository = studentRepository;
         }
-        public async Task<IEnumerable<StudentDto>> GetAllStudents(string? schoolName = null)
+
+        public async Task<IEnumerable<StudentDto>> GetAllStudents()
         {
-            var studentModels = (schoolName == null)
-                ? await _studentRepository.GetAll()
-                : await _studentRepository.GetAllBySchoolName(schoolName);
+            var studentModels = await _studentRepository.GetAll();
+
+            return studentModels.Select(model => new StudentDto
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Email = model.Email,
+                School = model.School?.Name
+            });
+        }
+
+        public async Task<IEnumerable<StudentDto>> GetAllStudents(string schoolName)
+        {
+            var studentModels = await _studentRepository.GetAllBySchoolName(schoolName);
+
+            return studentModels.Select(model => new StudentDto
+            {
+                Id = model.Id,
+                Name = model.Name,
+                Email = model.Email,
+                School = model.School?.Name
+            });
+        }
+
+        public async Task<IEnumerable<StudentDto>> GetAllStudents(int schoolId)
+        {
+            var studentModels = await _studentRepository.GetAllBySchoolId(schoolId);
 
             return studentModels.Select(model => new StudentDto
             {

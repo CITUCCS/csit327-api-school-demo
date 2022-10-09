@@ -32,11 +32,21 @@ namespace SchoolApi.Repositories
 
             using (var con = _context.CreateConnection())
             {
-                return await con.QueryAsync<Student, School, Student>(sql, (student, school) =>
-                {
-                    student.School = school;
-                    return student;
-                }); ;
+                return await con.QueryAsync<Student, School, Student>(sql, MapStudentSchool); ;
+            }
+        }
+
+        public async Task<IEnumerable<Student>> GetAllBySchoolId(int schoolId)
+        {
+            var sp = "[spStudent_GetAllBySchoolId]";
+
+            using (var con = _context.CreateConnection())
+            {
+                return await con.QueryAsync<Student, School, Student>(
+                    sp,
+                    MapStudentSchool,
+                    new { schoolId },
+                    commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -46,13 +56,11 @@ namespace SchoolApi.Repositories
 
             using (var con = _context.CreateConnection())
             {
-                return await con.QueryAsync<Student, School, Student>(sp, (student, school) =>
-                {
-                    student.School = school;
-                    return student;
-                }, 
-                new { schoolName },
-                commandType: CommandType.StoredProcedure);
+                return await con.QueryAsync<Student, School, Student>(
+                    sp,
+                    MapStudentSchool,
+                    new { schoolName },
+                    commandType: CommandType.StoredProcedure);
             }
         }
 
@@ -62,13 +70,15 @@ namespace SchoolApi.Repositories
 
             using (var con = _context.CreateConnection())
             {
-                var student = await con.QueryAsync<Student, School, Student>(sql, (student, school) =>
-                {
-                    student.School = school;
-                    return student;
-                }, new { id });
+                var student = await con.QueryAsync<Student, School, Student>(sql, MapStudentSchool, new { id });
                 return student.SingleOrDefault();
             }
+        }
+
+        private static Student MapStudentSchool (Student student, School school)
+        {
+            student.School = school;
+            return student;
         }
     }
 }
