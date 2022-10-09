@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using SchoolApi.Dtos.School;
+using SchoolApi.Dtos.Student;
 using SchoolApi.Models;
 using SchoolApi.Repositories;
 using SchoolApi.Services;
@@ -13,11 +14,16 @@ namespace SchoolApi.Controllers
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
+        private readonly IEnrollmentService _enrollmentService;
         private readonly ILogger<SchoolsController> _logger;
 
-        public SchoolsController(ISchoolService schoolService, ILogger<SchoolsController> logger)
+        public SchoolsController(
+            ISchoolService schoolService,
+            IEnrollmentService enrollmentService,
+            ILogger<SchoolsController> logger)
         {
             _schoolService = schoolService;
+            _enrollmentService = enrollmentService;
             _logger = logger;
         }
 
@@ -71,6 +77,31 @@ namespace SchoolApi.Controllers
                 // If successfully created, STATUS CODE IS 201
                 // /api/schools/{id} add to header as location
                 return CreatedAtRoute("GetSchoolById", new { id = newSchool.Id }, newSchool);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
+        }
+
+        [HttpPost("{id}/enroll", Name = "EnrollStudentToSchool")]  // POST /api/schools/1/enroll
+        public async Task<IActionResult> EnrollStudent(int id, [FromBody] StudentCreationDto newStudent)
+        {
+            try
+            {
+                // Check if school exists
+                var school = await _schoolService.GetSchoolById(id);
+                if (school == null)
+                    return NotFound($"School with id {id} does not exist.");
+
+                var newStudentId = await _enrollmentService.Enroll(id, newStudent);
+
+                return CreatedAtAction(
+                    nameof(StudentsController.Get),
+                    "Students",
+                    new { Id = newStudentId },
+                    newStudentId);
             }
             catch (Exception e)
             {

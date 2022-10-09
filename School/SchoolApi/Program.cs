@@ -12,10 +12,13 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 // Trasient -> create new instance of DapperContext everytime.
 builder.Services.AddTransient<DapperContext>();
-builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+// Services
 builder.Services.AddScoped<ISchoolService, SchoolService>();
-builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IEnrollmentService, EnrollmentService>();
+// Repos
+builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
 
 var app = builder.Build();
