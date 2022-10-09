@@ -42,7 +42,7 @@ namespace SchoolApi.Repositories
 
         public async Task<IEnumerable<Student>> GetAllBySchoolName(string schoolName)
         {
-            var sp = "[spSchool_GetAllBySchoolName]";
+            var sp = "[spStudent_GetAllBySchoolName]";
 
             using (var con = _context.CreateConnection())
             {
