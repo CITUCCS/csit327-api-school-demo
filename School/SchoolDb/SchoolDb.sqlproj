@@ -71,4 +71,7 @@
     <Build Include="dbo\Stored Procedures\spStudent_GetFromSchoolRevenue.sql" />
     <Build Include="dbo\Stored Procedures\spSchool_GetStudentBySchoolRevenue.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SchoolDb.publish.xml" />
+  </ItemGroup>
 </Project>

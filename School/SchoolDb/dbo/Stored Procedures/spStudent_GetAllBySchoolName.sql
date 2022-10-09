@@ -10,8 +10,12 @@ BEGIN
 
 	SELECT 
 		* 
-	FROM 
-		Student 
+	FROM
+		Student AS S
+	INNER JOIN 
+		School AS SC
+	ON 
+		S.SchoolId = SC.Id
 	WHERE 
 		SchoolId = @schoolId;
 END

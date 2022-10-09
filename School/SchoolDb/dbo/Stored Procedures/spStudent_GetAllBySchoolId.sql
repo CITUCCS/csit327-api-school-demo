@@ -5,7 +5,10 @@ BEGIN
 	SELECT 
 		* 
 	FROM
-		Student 
+		Student AS S
+	INNER JOIN 
+		School AS SC
+	ON S.SchoolId = SC.Id
 	WHERE 
-		SchoolId = @schoolId;
+		S.SchoolId = @schoolId;
 END
