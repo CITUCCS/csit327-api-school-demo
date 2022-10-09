@@ -1,4 +1,4 @@
-﻿using SchoolApi.Dtos;
+﻿using SchoolApi.Dtos.School;
 using SchoolApi.Models;
 using SchoolApi.Repositories;
 
@@ -13,7 +13,7 @@ namespace SchoolApi.Services
             _repository = repository;
         }
 
-        public async Task<School> CreateSchool(SchoolCreationDto schoolToCreate)
+        public async Task<SchoolDto> CreateSchool(SchoolCreationDto schoolToCreate)
         {
             // Convert Dto to Models
             var schoolModel = new School
@@ -26,17 +26,39 @@ namespace SchoolApi.Services
 
             schoolModel.Id = await _repository.Create(schoolModel);
 
-            return schoolModel;
+            return new SchoolDto
+            {
+                Id = schoolModel.Id,
+                Name = schoolModel.Name,
+                Address = schoolModel.Address,
+                Motto = schoolModel.Motto
+            };
         }
 
-        public Task<IEnumerable<School>> GetAllSchools()
+        public async Task<IEnumerable<SchoolDto>> GetAllSchools()
         {
-            return _repository.GetAll();
+            var schoolModels = await _repository.GetAll();
+            return schoolModels.Select(school => new SchoolDto
+            {
+                Id = school.Id,
+                Name = school.Name,
+                Address = school.Address,
+                Motto = school.Motto
+            });
         }
 
-        public Task<School> GetSchoolById(int id)
+        public async Task<SchoolDto?> GetSchoolById(int id)
         {
-            return _repository.GetSchool(id);
+            var schoolModel = await _repository.GetSchool(id);
+            if(schoolModel == null) return null;
+
+            return new SchoolDto
+            {
+                Id = schoolModel.Id,
+                Name = schoolModel.Name,
+                Address = schoolModel.Address,
+                Motto = schoolModel.Motto
+            };
         }
     }
 }

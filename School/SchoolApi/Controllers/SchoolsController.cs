@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using SchoolApi.Dtos;
+using SchoolApi.Dtos.School;
 using SchoolApi.Models;
 using SchoolApi.Repositories;
 using SchoolApi.Services;
@@ -27,10 +27,15 @@ namespace SchoolApi.Controllers
             try
             {
                 var school = await _schoolService.GetSchoolById(id);
+
+                if (school == null) 
+                    return NotFound($"School with id {id} does not exist.");
+
                 return Ok(school);
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return StatusCode(500, "Something went wrong");
             }
         }
@@ -49,8 +54,9 @@ namespace SchoolApi.Controllers
 
                 return Ok(schools);
             } 
-            catch (Exception)
+            catch (Exception e)
             {
+                _logger.LogError(e.Message);
                 return StatusCode(500, "Something went wrong");
             }
         }
@@ -58,11 +64,19 @@ namespace SchoolApi.Controllers
         [HttpPost] // POST /api/schools/
         public async Task<IActionResult> CreateSchool([FromBody] SchoolCreationDto schoolDto)
         {
-            var newSchool = await _schoolService.CreateSchool(schoolDto);
-            // If successfully created, STATUS CODE IS 201
-            //
-            // /api/schools/9 add to header as location
-           return CreatedAtRoute("GetSchoolById", new { id = newSchool.Id }, newSchool);
+            try
+            {
+                var newSchool = await _schoolService.CreateSchool(schoolDto);
+
+                // If successfully created, STATUS CODE IS 201
+                // /api/schools/{id} add to header as location
+                return CreatedAtRoute("GetSchoolById", new { id = newSchool.Id }, newSchool);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return StatusCode(500, "Something went wrong");
+            }
         }
     }
 }

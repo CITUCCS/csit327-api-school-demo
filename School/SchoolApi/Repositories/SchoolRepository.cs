@@ -34,13 +34,13 @@ namespace SchoolApi.Repositories
             }
         }
 
-        public async Task<School> GetSchool(int id)
+        public async Task<School?> GetSchool(int id)
         {
             var sql = "SELECT * FROM School WHERE Id = @id";
 
             using (var con = _context.CreateConnection())
             {
-                return await con.QuerySingleAsync<School>(sql, new { id });
+                return await con.QuerySingleOrDefaultAsync<School>(sql, new { id });
             }
         }
     }

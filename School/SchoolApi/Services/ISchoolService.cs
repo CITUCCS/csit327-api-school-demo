@@ -1,12 +1,12 @@
-﻿using SchoolApi.Dtos;
+﻿using SchoolApi.Dtos.School;
 using SchoolApi.Models;
 
 namespace SchoolApi.Services
 {
     public interface ISchoolService
     {
-        Task<IEnumerable<School>> GetAllSchools();
-        Task<School> GetSchoolById(int id);
-        Task<School> CreateSchool(SchoolCreationDto schoolToCreate);
+        Task<IEnumerable<SchoolDto>> GetAllSchools();
+        Task<SchoolDto?> GetSchoolById(int id);
+        Task<SchoolDto> CreateSchool(SchoolCreationDto schoolToCreate);
     }
 }

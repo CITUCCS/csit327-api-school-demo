@@ -1,4 +1,4 @@
-﻿namespace SchoolApi.Dtos
+﻿namespace SchoolApi.Dtos.School
 {
     public class SchoolCreationDto
     {
