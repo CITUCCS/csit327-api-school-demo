@@ -14,6 +14,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DapperContext>();
 builder.Services.AddScoped<ISchoolRepository, SchoolRepository>();
 builder.Services.AddScoped<ISchoolService, SchoolService>();
+builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+builder.Services.AddScoped<IStudentService, StudentService>();
+
 
 var app = builder.Build();
 

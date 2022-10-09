@@ -56,14 +56,19 @@ namespace SchoolApi.Repositories
             }
         }
 
-        public async Task<Student> GetStudent(int id)
-            {
-                var sql = "SELECT * FROM Student WHERE Id = @id";
+        public async Task<Student?> GetStudent(int id)
+        {
+            var sql = "SELECT * FROM Student AS S INNER JOIN School AS SC ON S.SchoolId = SC.Id WHERE S.Id = @Id";
 
-                using (var con = _context.CreateConnection())
+            using (var con = _context.CreateConnection())
+            {
+                var student = await con.QueryAsync<Student, School, Student>(sql, (student, school) =>
                 {
-                    return await con.QuerySingleAsync<Student>(sql, new { id });
-                }
+                    student.School = school;
+                    return student;
+                }, new { id });
+                return student.SingleOrDefault();
             }
         }
+    }
 }

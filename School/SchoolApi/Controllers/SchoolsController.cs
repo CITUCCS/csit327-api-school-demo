@@ -13,10 +13,12 @@ namespace SchoolApi.Controllers
     public class SchoolsController : ControllerBase
     {
         private readonly ISchoolService _schoolService;
+        private readonly ILogger<SchoolsController> _logger;
 
-        public SchoolsController(ISchoolService schoolService)
+        public SchoolsController(ISchoolService schoolService, ILogger<SchoolsController> logger)
         {
             _schoolService = schoolService;
+            _logger = logger;
         }
 
         [HttpGet("{id}", Name = "GetSchoolById")] // GET /api/schools/{id} ex: /api/schools/-4.5
