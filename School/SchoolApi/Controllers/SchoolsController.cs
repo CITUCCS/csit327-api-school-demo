@@ -99,10 +99,10 @@ namespace SchoolApi.Controllers
                 var newStudentId = await _enrollmentService.Enroll(id, newStudent);
 
                 return CreatedAtAction(
-                    nameof(StudentsController.Get),
-                    "Students",
-                    new { Id = newStudentId },
-                    newStudentId);
+                    nameof(StudentsController.Get), // name of the action/function
+                    "Students", // name of the controller
+                    new { Id = newStudentId }, // parameter needed
+                    $"Successfully enrolled {newStudent.Name} at {school.Name}"); // returned data
             }
             catch (Exception e)
             {
@@ -111,7 +111,7 @@ namespace SchoolApi.Controllers
             }
         }
 
-        [HttpGet("{id}/students")]
+        [HttpGet("{id}/students", Name = "GetSchoolStudents")]
         public async Task<IActionResult> GetSchoolStudents(int id)
         {
             try

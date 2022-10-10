@@ -23,15 +23,17 @@ namespace SchoolApi.Controllers
         {
             try
             {
-                var students = await _studentService.GetAllStudents(school);
+                var students = school != null 
+                    ? await _studentService.GetAllStudents(school)
+                    : await _studentService.GetAllStudents();
                 
                 if (!students.Any())
                 {
                     _logger.LogInformation("No students found.");
-                    return NoContent();
+                    return NoContent(); // Status Code 204
                 }
 
-                return Ok(students);
+                return Ok(students); // Status Code 200
             }
             catch (Exception e)
             {
@@ -39,7 +41,7 @@ namespace SchoolApi.Controllers
                 return StatusCode(500, "Something went wrong.");
             }
         }
-        // GET api/<StudentsController>/5
+        // GET api/students/5
         [HttpGet("{id}", Name = "GetStudentById")]
         public async Task<IActionResult> Get(int id)
         {
