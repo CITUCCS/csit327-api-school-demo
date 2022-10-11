@@ -13,7 +13,6 @@ namespace SchoolApi.Context
         /// <summary>
         /// Create new instance of DapperContext.
         /// </summary>
-        /// <param name="connectionString">Connection string to the target database</param>
         public DapperContext(IConfiguration configuration)
         {
             _connectionString = configuration.GetConnectionString("SqlServer");

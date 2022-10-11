@@ -68,12 +68,38 @@ namespace SchoolApi.Controllers
             }
         }
 
-        [HttpPost] // POST /api/schools/
-        public async Task<IActionResult> CreateSchool([FromBody] SchoolCreationDto schoolDto)
+        /// <summary>
+        /// Creates a school
+        /// </summary>
+        /// <param name="school">School details</param>
+        /// <returns>Returns the newly created school</returns>
+        /// <remarks>
+        /// Sample request:
+        /// 
+        ///     POST /api/schools
+        ///     {
+        ///         "name" : "CIT-U",
+        ///         "address" : "N.Bacalso Ave. Cebu City",
+        ///         "motto" : "Tops again"
+        ///         "averageTuition" : 1000
+        ///     }
+        /// 
+        /// </remarks>
+        /// <response code="201">Successfully created a school</response>
+        /// <response code="400">School details are invalid</response>
+        /// <response code="500">Internal server error</response>
+        /// 
+        [HttpPost]
+        [Consumes("application/json")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(SchoolDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateSchool([FromBody] SchoolCreationDto school)
         {
             try
             {
-                var newSchool = await _schoolService.CreateSchool(schoolDto);
+                var newSchool = await _schoolService.CreateSchool(school);
 
                 // If successfully created, STATUS CODE IS 201
                 // /api/schools/{id} add to header as location
